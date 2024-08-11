@@ -5,6 +5,8 @@
 #### 추가 보안(30~40분) 후 2차 등록 : 인터넷 검색은 이때 필요시 사용
 
 ### flow chart: https://hello-woody.tistory.com/14
+### msa 개요: https://velog.io/@tedigom/MSA-%EC%A0%9C%EB%8C%80%EB%A1%9C-%EC%9D%B4%ED%95%B4%ED%95%98%EA%B8%B0-2-MSA-Outer-Architecure
+### microservices: https://microservices.io/
 
 ### 클라우드 환경, 아키텍트 패턴, MSA 
 #### 애플리케이션아키텍처패턴: 애플리케이션에대해어떤아키텍처를선택해야하는가?				
