@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat UI with Bootstrap</title>
+    <meta charset="UTF-8" />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      #chat-box {
+        height: 350px;
+        overflow-y: auto;
+        margin-bottom: 10px;
+      }
+
+      .my-message {
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-body" id="chat-box">
+              <p class="other-message">안녕하세요!</p>
+              <p class="other-message">간단한 채팅 UI 테스트 중입니다.</p>
+            </div>
+            <div class="card-footer">
+              <input
+                type="text"
+                id="message-input"
+                class="form-control"
+                placeholder="메시지를 입력하세요"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      
+      const WEB_SOCKET_URL = "wss://gptlecturegptpubsub.webpubsub.azure.com/client/hubs/test_hub?access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ3c3M6Ly9ncHRsZWN0dXJlZ3B0cHVic3ViLndlYnB1YnN1Yi5henVyZS5jb20vY2xpZW50L2h1YnMvdGVzdF9odWIiLCJpYXQiOjE3MzIxNjE0NzIsImV4cCI6MTczMjE2NTA3Miwicm9sZSI6WyJ3ZWJwdWJzdWIuc2VuZFRvR3JvdXAiLCJ3ZWJwdWJzdWIuam9pbkxlYXZlR3JvdXAiXX0.9QelxejJlC2kmH2SdYRqf7c6OpTVdH8DR6FaQjU-0YY";
+      const pubsubClient= new WebSocket(WEB_SOCKET_URL, `json.webpubsub.azure.v1`)
+
+      pubsubClient.onopen = function(event){
+        console.log('연결성공!');
+
+        pubsubClient.send(
+          JSON.stringify({
+            type: 'joinGroup',
+            group: 'Group1'
+          })
+        );
+      }
+
+      pubsubClient.onmessage = function(event){
+        let message = JSON.parse(event.data)
+        console.log(message);
+
+        if(message.data && message.data!==""){
+          $('#chat-box').append('<p class="other-message">'+message.data + '</p>');
+        }
+      }
+      
+      $(document).ready(function () {
+        $("#message-input").keydown(function (event) {
+          if (event.isComposing || event.keyCode === 229) {
+            return;
+          }
+          if (event.key === "Enter") {
+            var message = $(this).val();
+            if (message.trim() !== "") {
+              $("#chat-box").append(
+                '<p class="my-message">' + message + "</p>"
+              );
+              $(this).val("");
+              $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
+            }
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
